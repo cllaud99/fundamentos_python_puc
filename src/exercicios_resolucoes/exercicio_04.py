@@ -52,7 +52,6 @@ def obtem_aqi_cidades(cidades_df: pd.DataFrame) -> pd.DataFrame:
         })
     return pd.DataFrame(resultados)
 
-def 
 
 
 if __name__ == "__main__":

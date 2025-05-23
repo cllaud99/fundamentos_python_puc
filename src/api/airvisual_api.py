@@ -34,7 +34,7 @@ def get_air_quality(
         return response.json()
 
     except HTTPError as e:
-        if e.response.status_code == 429 and wait <= 60:
+        if e.response.status_code == 429 and wait <= 100:
             print(
                 f"[LIMITE ALCANÇADO] Aguardando {wait} segundos antes de tentar novamente..."
             )
