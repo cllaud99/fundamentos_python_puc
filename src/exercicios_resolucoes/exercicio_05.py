@@ -18,23 +18,90 @@ from api.weather_api import get_temperature
 from db.db_handler import run_query_from_file
 from exercicios_resolucoes.exercicio_04 import obtem_aqi_cidades
 
-QUERY_LIMIT = 2
-
+QUERY_LIMIT = 10
 
 def clientes_em_areas_criticas() -> pd.DataFrame:
+    """
+    Executa consulta SQL para buscar clientes com informações de cidade e país.
+
+    Returns:
+        pd.DataFrame: Dados dos clientes com suas respectivas localizações.
+    """
     sql_path = "src/db/sql/ex_05_clientes_em_areas_criticas.sql"
-    df_clientes_em_areas_criticas = run_query_from_file(sql_path, QUERY_LIMIT)
-    return df_clientes_em_areas_criticas
+    return run_query_from_file(sql_path, QUERY_LIMIT)
 
 
-def combina_nomes_cidades_e_paises(df_clientes_em_areas_criticas):
-    df = obtem_aqi_cidades(df_clientes_em_areas_criticas)
+def combina_nomes_cidades_e_paises(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Enriquecer DataFrame com dados de AQI e temperatura.
+
+    Args:
+        df (pd.DataFrame): DataFrame com colunas ['nome', 'cidade', 'pais']
+
+    Returns:
+        pd.DataFrame: DataFrame com AQI e temperatura incluídos.
+    """
+    df = obtem_aqi_cidades(df)
+
+    temperaturas = []
+    for _, row in df.iterrows():
+        temperatura = get_temperature(row["cidade"], row["pais"])
+        temperaturas.append(temperatura)
+
+    df["temperatura"] = temperaturas
     return df
 
 
-if __name__ == "__main__":
-    df_clientes_em_areas_criticas = clientes_em_areas_criticas()
-    df_clientes_em_areas_criticas = combina_nomes_cidades_e_paises(
-        df_clientes_em_areas_criticas
+def clientes_aqui_acima_de_130(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Filtra os clientes com AQI acima de 130.
+
+    Args:
+        df (pd.DataFrame): DataFrame com coluna 'aqi'
+
+    Returns:
+        pd.DataFrame: Apenas clientes em áreas críticas.
+    """
+    return df[df["aqi"] > 130].reset_index(drop=True)
+
+
+def classifica_clientes_por_aqui(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adiciona uma coluna de classificação para clientes com base no AQI.
+
+    Args:
+        df (pd.DataFrame): DataFrame com coluna 'aqi'
+
+    Returns:
+        pd.DataFrame: DataFrame com nova coluna 'classificacao'
+    """
+    df["classificacao"] = df["aqi"].apply(
+        lambda aqi: "zona de atenção" if aqi > 130 else "seguro"
     )
-    print(df_clientes_em_areas_criticas)
+    return df
+
+
+def main():
+    print("1. Recuperando clientes com cidade e país:")
+    df_clientes = clientes_em_areas_criticas()
+    print(df_clientes)
+    print("**********************************************************")
+
+    print("2. Combinando nome, cidade, país, temperatura e AQI:")
+    df_enriquecido = combina_nomes_cidades_e_paises(df_clientes)
+    print(df_enriquecido)
+    print("**********************************************************")
+
+    print("3. Filtrando apenas clientes com AQI acima de 130 (áreas críticas):")
+    df_filtrado = clientes_aqui_acima_de_130(df_enriquecido)
+    print(df_filtrado)
+    print("**********************************************************")
+
+    print('4. Classificando clientes como "zona de atenção" com base no AQI:')
+    df_classificado = classifica_clientes_por_aqui(df_filtrado)
+    print(df_classificado)
+    print("**********************************************************")
+
+
+if __name__ == "__main__":
+    main()
