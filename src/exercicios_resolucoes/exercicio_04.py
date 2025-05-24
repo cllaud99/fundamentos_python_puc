@@ -11,7 +11,7 @@ import sys
 import pandas as pd
 
 sys.path.insert(
-    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",".." , "src"))
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 )
 
 from api.airvisual_api import get_aqi
@@ -19,10 +19,11 @@ from db.db_handler import run_query_from_file
 
 QUERY_LIMIT = 10
 
+
 def cidades_mais_clientes() -> pd.DataFrame:
-   sql_path = "src/db/sql/ex_04_qtd_clientes_cidade.sql"
-   df_cidades_mais_clientes = run_query_from_file(sql_path, QUERY_LIMIT)
-   return df_cidades_mais_clientes
+    sql_path = "src/db/sql/ex_04_qtd_clientes_cidade.sql"
+    df_cidades_mais_clientes = run_query_from_file(sql_path, QUERY_LIMIT)
+    return df_cidades_mais_clientes
 
 
 def obtem_aqi_cidades(cidades_df: pd.DataFrame) -> pd.DataFrame:
@@ -50,7 +51,9 @@ def obtem_aqi_cidades(cidades_df: pd.DataFrame) -> pd.DataFrame:
     return cidades_df
 
 
-def filtra_cidades_alto_aqi(cidades_aqi_df: pd.DataFrame, limite_aqi: int = 150) -> pd.DataFrame:
+def filtra_cidades_alto_aqi(
+    cidades_aqi_df: pd.DataFrame, limite_aqi: int = 150
+) -> pd.DataFrame:
     """
     Filtra cidades com AQI maior que o limite especificado.
 
@@ -70,7 +73,9 @@ def filtra_cidades_alto_aqi(cidades_aqi_df: pd.DataFrame, limite_aqi: int = 150)
     return cidades_alto_aqi
 
 
-def filmes_mais_alugados_nas_cidades(cidades_filtradas_df: pd.DataFrame) -> pd.DataFrame:
+def filmes_mais_alugados_nas_cidades(
+    cidades_filtradas_df: pd.DataFrame,
+) -> pd.DataFrame:
     """
     Retorna os filmes mais alugados filtrados pelas cidades passadas.
 
@@ -85,11 +90,11 @@ def filmes_mais_alugados_nas_cidades(cidades_filtradas_df: pd.DataFrame) -> pd.D
 
     # Filtra apenas os filmes cujas cidades estão na lista filtrada
     cidades_alto_aqi = cidades_filtradas_df["city"].unique()
-    df_filmes_filtrados = df_filmes_alugados[df_filmes_alugados["cidade"].isin(cidades_alto_aqi)].copy()
+    df_filmes_filtrados = df_filmes_alugados[
+        df_filmes_alugados["cidade"].isin(cidades_alto_aqi)
+    ].copy()
 
     return df_filmes_filtrados.head(QUERY_LIMIT)
-
-
 
 
 def main():
@@ -108,11 +113,11 @@ def main():
     print(df_cidades_alto_aqi)
     print("**********************************************************")
 
-
     print("Buscando os filmes mais alugados em cidades com AQI > 150:")
     df_filmes_populares = filmes_mais_alugados_nas_cidades(df_cidades_alto_aqi)
     print(df_filmes_populares)
     print("**********************************************************")
+
 
 if __name__ == "__main__":
     main()

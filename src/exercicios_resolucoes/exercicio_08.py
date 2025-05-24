@@ -14,11 +14,13 @@ sys.path.insert(
 )
 
 import pandas as pd
-from db.db_handler import run_query_from_file
+
 from api.airvisual_api import get_aqi
 from api.weather_api import get_temperature
+from db.db_handler import run_query_from_file
 
 QUERY_LIMIT = 10
+
 
 def calcula_tempo_medio_por_cidade() -> pd.DataFrame:
     sql_path = "src/db/sql/ex_08_perfil_clientes.sql"
@@ -80,19 +82,25 @@ def analisa_perfil(df_perfil: pd.DataFrame) -> pd.DataFrame:
     # Define faixas etárias
     bins = [0, 18, 25, 35, 45, 60, 200]
     labels = ["<18", "18-25", "26-35", "36-45", "46-60", "60+"]
-    df_perfil["faixa_etaria"] = pd.cut(df_perfil["idade"], bins=bins, labels=labels, right=False)
+    df_perfil["faixa_etaria"] = pd.cut(
+        df_perfil["idade"], bins=bins, labels=labels, right=False
+    )
 
     # Agrega por faixa etária
     df_agg = (
-        df_perfil.groupby("faixa_etaria", observed=False)[["temperatura_c", "aqi", "total_alugueis", "gasto_total"]]
+        df_perfil.groupby("faixa_etaria", observed=False)[
+            ["temperatura_c", "aqi", "total_alugueis", "gasto_total"]
+        ]
         .mean()
         .reset_index()
-        .rename(columns={
-            "temperatura_c": "temperatura_media",
-            "aqi": "aqi_medio",
-            "total_alugueis": "media_alugueis",
-            "gasto_total": "media_gastos"
-        })
+        .rename(
+            columns={
+                "temperatura_c": "temperatura_media",
+                "aqi": "aqi_medio",
+                "total_alugueis": "media_alugueis",
+                "gasto_total": "media_gastos",
+            }
+        )
     )
 
     return df_agg
@@ -118,6 +126,7 @@ def main():
     df_perfil_final = analisa_perfil(df_perfil_temperatura_aqi)
     print(df_perfil_final)
     print("**********************************************************")
+
 
 if __name__ == "__main__":
     main()

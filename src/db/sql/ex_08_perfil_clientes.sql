@@ -4,9 +4,7 @@ SELECT
 	city.city AS cidade,
 	address.district AS estado,
 	country.country AS pais,
-	COUNT(rental.rental_id) AS total_alugueis,
-	COALESCE(SUM(payment.amount), 0) AS gasto_total,
-	FLOOR(RANDOM() * (70 - 18 + 1) + 18) AS idade -- idade aleatória entre 18 e 70
+	COALESCE(SUM(payment.amount), 0) AS gasto_total
 FROM
 	customer
 JOIN address ON

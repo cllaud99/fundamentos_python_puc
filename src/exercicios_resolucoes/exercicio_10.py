@@ -13,8 +13,8 @@ sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 )
 
-from cache.cache_handler import load_cache, get_result, save_cache
 from api.airvisual_api import get_aqi  # Função que busca AQI real da API
+from cache.cache_handler import get_result, load_cache, save_cache
 
 
 def exemplo_funcionamento_cache(df_tempo_medio_por_cidade: pd.DataFrame):
@@ -24,21 +24,19 @@ def exemplo_funcionamento_cache(df_tempo_medio_por_cidade: pd.DataFrame):
     Args:
         df_tempo_medio_por_cidade (pd.DataFrame): DataFrame com as cidades a consultar.
     """
-    CSV_PATH = 'data/cache/aqi_cache_exemplo.csv'
+    CSV_PATH = "data/cache/aqi_cache_exemplo.csv"
     cache_data = load_cache(CSV_PATH)
 
     for _, row in df_tempo_medio_por_cidade.iterrows():
-        cidade = row['city']
-        estado = row['district']
-        country = row['country']
+        cidade = row["city"]
+        estado = row["district"]
+        country = row["country"]
 
         fetch_func: Callable[[], str] = lambda: get_aqi(cidade, estado, country)
 
         resultado = get_result(cidade, cache_data, fetch_func=fetch_func)
         save_cache(CSV_PATH, cache_data)
         print(f"Resultado para {cidade}: {resultado}")
-
-    
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 import csv
 import os
 from datetime import datetime, timedelta
-from typing import Dict, Tuple, Callable, Optional
+from typing import Callable, Dict, Optional, Tuple
 
 CACHE_EXPIRATION_HOURS = 10
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -19,11 +19,11 @@ def load_cache(csv_path: str) -> Dict[str, Tuple[str, datetime]]:
     """
     cache: Dict[str, Tuple[str, datetime]] = {}
     if os.path.exists(csv_path):
-        with open(csv_path, mode='r', newline='', encoding='utf-8') as file:
+        with open(csv_path, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                timestamp = datetime.strptime(row['timestamp'], DATETIME_FORMAT)
-                cache[row['key']] = (row['result'], timestamp)
+                timestamp = datetime.strptime(row["timestamp"], DATETIME_FORMAT)
+                cache[row["key"]] = (row["result"], timestamp)
     return cache
 
 
@@ -36,22 +36,24 @@ def save_cache(csv_path: str, cache: Dict[str, Tuple[str, datetime]]) -> None:
         cache (Dict[str, Tuple[str, datetime]]): Cache com resultado e horário.
     """
     os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-    with open(csv_path, mode='w', newline='', encoding='utf-8') as file:
-        fieldnames = ['key', 'result', 'timestamp']
+    with open(csv_path, mode="w", newline="", encoding="utf-8") as file:
+        fieldnames = ["key", "result", "timestamp"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for key, (result, timestamp) in cache.items():
-            writer.writerow({
-                'key': key,
-                'result': result,
-                'timestamp': timestamp.strftime(DATETIME_FORMAT)
-            })
+            writer.writerow(
+                {
+                    "key": key,
+                    "result": result,
+                    "timestamp": timestamp.strftime(DATETIME_FORMAT),
+                }
+            )
 
 
 def get_result(
     key: str,
     cache: Dict[str, Tuple[str, datetime]],
-    fetch_func: Optional[Callable[[], str]] = None
+    fetch_func: Optional[Callable[[], str]] = None,
 ) -> Optional[str]:
     """
     Retorna o resultado do cache se válido, ou usa fetch_func para obter e atualizar o cache.
@@ -79,15 +81,17 @@ def get_result(
         cache[key] = (result, now)
         return result
 
-    print(f"[CACHE MISS SEM FETCH_FUNC] Nenhum dado encontrado e nenhuma função de busca fornecida para '{key}'")
+    print(
+        f"[CACHE MISS SEM FETCH_FUNC] Nenhum dado encontrado e nenhuma função de busca fornecida para '{key}'"
+    )
     return None
 
 
 if __name__ == "__main__":
-    CSV_PATH = 'data/cache/cache.csv'
+    CSV_PATH = "data/cache/cache.csv"
     cache_data = load_cache(CSV_PATH)
 
-    for input_key in ['abc', '123', 'abc']:
+    for input_key in ["abc", "123", "abc"]:
         # Simulação de busca real apenas se cache inválido
         def fetch_real():
             return input_key[::-1]

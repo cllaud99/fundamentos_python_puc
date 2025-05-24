@@ -20,6 +20,7 @@ from exercicios_resolucoes.exercicio_04 import obtem_aqi_cidades
 
 QUERY_LIMIT = 10
 
+
 def clientes_em_areas_criticas() -> pd.DataFrame:
     """
     Executa consulta SQL para buscar clientes com informações de cidade e país.
