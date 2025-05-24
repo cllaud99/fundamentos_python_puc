@@ -11,7 +11,7 @@ Projeto acadêmico para a disciplina de Fundamentos de Python da Pós-graduaçã
 - Sistema inteligente de cache em CSV
 - Integração com PostgreSQL via Docker
 - 10 exercícios práticos de Python
-- Pipeline de formatação automática de código
+- Pipeline de formatação automática de código (black e isort e taskipy)
 - Ambiente configurado com Docker e pgAdmin
 
 ## 📁 Estrutura do Projeto
@@ -24,14 +24,14 @@ fundamentos_python_puc/
 │   └── reports/               # Arquivos XLSX gerados
 ├── pagila/                    # Repositório clonado com base de dados
 ├── src/                       # Código-fonte principal
+│   ├── api/                   # Integrações com APIs externas
+│   │   ├── airvisual.py
+│   │   ├── countries.py
+│   │   └── weather.py
 │   ├── cache/                 # Sistema de cache inteligente
 │   ├── db/                    # Módulo de acesso ao banco de dados
 │   │   ├── sql/               # Consultas SQL dos exercícios
 │   │   └── db_handler.py      # Conexão e manipulação do banco
-│   ├── services/              # Integrações com APIs externas
-│   │   ├── airvisual.py
-│   │   ├── countries.py
-│   │   └── weather.py
 │   ├── exercicios_resolucoes/ # Lista de exercícios resolvidos
 │   └── main.py                # Arquivo principal de execução
 ├── .env.example               # Exemplo de variáveis de ambiente
@@ -94,3 +94,54 @@ Dentro da pasta `pagila`, execute o seguinte comando para iniciar o banco Postgr
 cd pagila
 docker-compose up -d
 ```
+
+## 🧱 Principais Stacks Utilizadas
+
+Este projeto utiliza uma combinação de bibliotecas modernas do ecossistema Python, organizadas por categoria:
+
+---
+
+### 📦 manipulação de dados
+
+- **[Pandas](https://pandas.pydata.org/)**: Manipulação e análise de dados tabulares.
+- **[Scipy](https://scipy.org/)**: Operações científicas, estatísticas e de otimização.
+- **[Matplotlib](https://matplotlib.org/)**: Criação de gráficos e visualizações.
+- **[Seaborn](https://seaborn.pydata.org/)**: Visualizações estatísticas baseadas em matplotlib.
+
+---
+
+### 🌐 Integração com APIs
+
+- **[Requests](https://docs.python-requests.org/)**: Requisições HTTP de forma simples e poderosa.
+- **[Rapidfuzz](https://github.com/maxbachmann/RapidFuzz)**: Algoritmos de similaridade de strings (fuzzy matching).
+
+---
+
+### 🗄️ Banco de Dados
+
+- **[SQLAlchemy](https://www.sqlalchemy.org/)**: ORM para modelagem e manipulação de dados relacionais.
+- **[psycopg2-binary](https://pypi.org/project/psycopg2-binary/)**: Driver PostgreSQL para Python.
+
+---
+
+### ⚙️ Configuração e Automação
+
+- **[python-dotenv](https://pypi.org/project/python-dotenv/)**: Gerenciamento de variáveis de ambiente via `.env`.
+- **[Taskipy](https://github.com/RocktimSaikia/taskipy)**: Automatização de tarefas via terminal com configuração simples no `pyproject.toml`.
+
+---
+
+### 🧹 Qualidade e Organização de Código
+
+- **[Black](https://black.readthedocs.io/)**: Formatador automático de código seguindo o padrão PEP8.
+- **[Isort](https://pycqa.github.io/isort/)**: Organização automática de imports.
+
+---
+
+### 🐍 Ambiente
+
+- **Python 3.12+**: Versão mínima exigida pelo projeto.
+- **Gerenciador de dependências**: [UV](https://github.com/astral-sh/uv) para ambientes rápidos e compatíveis com o `pyproject.toml`.
+- **Alternativa com `requirements.txt`**: Para quem preferir usar `pip` diretamente.
+
+---

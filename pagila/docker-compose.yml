@@ -6,8 +6,9 @@ services:
     image: postgres:17
     container_name: pagila
     environment:
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_USER: postgres
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DB}           # caso queira definir o banco padrão
     volumes:
       - ./pagila-schema.sql:/docker-entrypoint-initdb.d/1-pagila-schema.sql
       - ./pagila-schema-jsonb.sql:/docker-entrypoint-initdb.d/1-pagila-schema-jsonb.sql
@@ -19,7 +20,8 @@ services:
     expose:
       - 5432
     ports:
-      - 5432:5432
+      - "${PG_PORT}:5432"
+
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
@@ -32,4 +34,3 @@ services:
       - "./pgadmin/pgadmin_pass:/pgadmin4/pass"
     ports:
       - "5050:80"
-   
