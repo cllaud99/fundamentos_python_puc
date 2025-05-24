@@ -43,13 +43,6 @@ def combina_nomes_cidades_e_paises(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame com AQI e temperatura incluídos.
     """
     df = obtem_aqi_cidades(df)
-
-    temperaturas = []
-    for _, row in df.iterrows():
-        temperatura = get_temperature(row["cidade"], row["pais"])
-        temperaturas.append(temperatura)
-
-    df["temperatura"] = temperaturas
     return df
 
 
