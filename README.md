@@ -95,6 +95,29 @@ cd pagila
 docker-compose up -d
 ```
 
+## 📦 Execução dos Exercícios
+
+Este projeto contém uma série de exercícios localizados em `exercicios_resolucoes/`, com arquivos nomeados no padrão `exercicio_01.py`, `exercicio_02.py`, ..., `exercicio_10.py`.
+
+Cada um desses arquivos implementa uma função `main()`, que pode ser executada individualmente. No entanto, para executar todos de uma vez, basta rodar o arquivo principal `main.py` que está na pasta `src/`.
+
+### ✅ Como rodar todos os exercícios
+
+No terminal, execute o seguinte comando a partir da raiz do projeto:
+
+```
+uv run python src/main.py
+```
+
+ou se instalou com pip 
+
+```
+python src/main.py
+```
+
+Esse script irá importar e executar automaticamente a função `main()` de cada exercício, na ordem correta (`01` a `10`), exibindo os resultados no terminal.
+
+
 ## 🧱 Principais Stacks Utilizadas
 
 Este projeto utiliza uma combinação de bibliotecas modernas do ecossistema Python, organizadas por categoria:
