@@ -13,6 +13,7 @@ sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 )
 
+from db.db_handler import run_query_from_file
 from api.airvisual_api import get_aqi  # Função que busca AQI real da API
 from cache.cache_handler import get_result, load_cache, save_cache
 
@@ -39,10 +40,13 @@ def exemplo_funcionamento_cache(df_tempo_medio_por_cidade: pd.DataFrame):
         print(f"Resultado para {cidade}: {resultado}")
 
 
-if __name__ == "__main__":
-    from db.db_handler import run_query_from_file
+def main():
+
 
     sql_path = "src/db/sql/ex_10_lista_cidades_cache_exemplo.sql"
     df_tempo_medio_por_cidade = run_query_from_file(sql_path, 40)
 
     exemplo_funcionamento_cache(df_tempo_medio_por_cidade)
+
+if __name__ == "__main__":
+    main()
